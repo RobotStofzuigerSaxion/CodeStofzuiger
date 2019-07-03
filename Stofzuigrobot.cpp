@@ -150,7 +150,7 @@ float afstandRechts(){
 
 int limitOnder(int limiet){
 
-    int output = 0;
+   int output = 0;
 
     float afstand = 0;
 
@@ -196,7 +196,7 @@ int limitLinks(int limiet){
 
  
 
-        if(i == 9){
+       if(i == 9){
 
             float gemAfstand = afstand / 10;
 
@@ -224,7 +224,7 @@ int limitVoor(int limiet){
 
  
 
-    for (int i = 0; i < 10; i++){
+   for (int i = 0; i < 10; i++){
 
         afstand = afstand + ((13.3/(sensorVoor*3.2))-0.42); //cm
 
@@ -472,7 +472,7 @@ void achteruit(int cms){
 
     int toerental = 120;
 
-    float PWM = cms/((toerental*6.65)/60);
+   float PWM = cms/((toerental*6.65)/60);
 
     float snelheid = PWM;
 
@@ -502,7 +502,7 @@ void links(int graden, float snelheid){
 
     aansturing(1, "links");
 
-    wait(0);
+    wait(seconden);
 
     aansturing(snelheid, "vooruit");
 
@@ -520,7 +520,7 @@ void rechts(int graden, float snelheid){
 
     aansturing(1, "rechts");
 
-    wait(0);
+    wait(seconden);
 
     aansturing(snelheid, "vooruit");
 
@@ -566,39 +566,47 @@ int main()
 
         while (Arduino1 == 1) {
 
-            if (limitVoor(10)){
+            vooruit(10);
 
-                rechts(rand() % 90 + 90, 1);
+            if (limitVoor(10) == 1){
 
-                //vooruit(10);
+                pc.printf("1 \r\n");
+
+                vooruit(0);
+
+                rechts((rand() % 90) + 90, 1);
 
             }
 
             if (limitOnder(10) == 0){
 
+                pc.printf("2 \r\n");
+
                 achteruit(10);
 
                 wait_ms(400);
 
-                rechts(rand() % 90 + 90, 1);
-
-                //vooruit(10);
+                rechts(90, 1);
 
             }
 
-            if (limitLinks(7)){
+            if (limitLinks(7) == 1){
+
+                vooruit(0);
+
+                pc.printf("3 \r\n");
 
                 rechts(10, 1);
 
-                //vooruit(10);
-
             }
 
-            if (limitRechts(7)){
+            if (limitRechts(7) == 1){
+
+                pc.printf("4 \r\n");
+
+                vooruit(0);
 
                 links(10, 1);
-
-                //vooruit(10);
 
             }
 
@@ -668,7 +676,7 @@ int main()
 
                         Y = (stoi(y)*2)-98;
 
-                        float lX = X;
+                       float lX = X;
 
                         float lY = Y;
 
@@ -774,7 +782,7 @@ int main()
 
                         snelheidBorstelsZijnkant(1);
 
-                        ventilator(1);
+                       ventilator(1);
 
                     }
 
@@ -809,6 +817,10 @@ int main()
             wielLinks = 0;
 
             wielRechts = 0;
+
+            snelheidAlleBorstels(0);
+
+            ventilator(0);
 
             wait_ms(100);
 
